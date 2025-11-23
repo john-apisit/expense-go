@@ -4,7 +4,7 @@ import { supabase } from '../../../supabase/client'
 export function useAuth() {
   const loading = ref(false)
   const error = ref<string | null>(null)
-  const user = ref(null)
+  const user = ref<any>(null)
 
   const signIn = async (email: string, password: string) => {
     loading.value = true
@@ -40,7 +40,7 @@ export function useAuth() {
       
       // Seed default categories for new user
       if (data.user) {
-        await supabase.rpc('seed_default_categories', { p_user_id: data.user.id })
+        await supabase.rpc('seed_default_categories', { p_user_id: data.user.id } as any)
       }
       
       user.value = data.user

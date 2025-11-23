@@ -68,7 +68,7 @@ const fetchTransactions = async () => {
       .order('created_at', { ascending: false })
 
     if (error) throw error
-    transactions.value = data || []
+    transactions.value = (data || []) as RecurringTransaction[]
   } catch (e) {
     console.error('Error fetching transactions:', e)
   } finally {

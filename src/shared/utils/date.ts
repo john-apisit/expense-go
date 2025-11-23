@@ -31,7 +31,9 @@ export function getLastDayOfMonth(year: number, month: number): Date {
 }
 
 export function parseMonthKey(monthKey: string): { year: number; month: number } {
-  const [year, month] = monthKey.split('-').map(Number)
+  const parts = monthKey.split('-').map(Number)
+  const year = parts[0] ?? 0
+  const month = parts[1] ?? 1
   return { year, month: month - 1 }
 }
 
@@ -51,7 +53,7 @@ export function isMonthInRange(
 
 export function formatDateInput(date: string | Date): string {
   const d = typeof date === 'string' ? new Date(date) : date
-  return d.toISOString().split('T')[0]
+  return d.toISOString().split('T')[0] ?? ''
 }
 
 export function formatMonthInput(date: string | Date): string {

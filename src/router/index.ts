@@ -61,7 +61,7 @@ const router = createRouter({
 })
 
 // Navigation guard
-router.beforeEach(async (to, from, next) => {
+router.beforeEach(async (to, _from, next) => {
   const { data } = await supabase.auth.getSession()
   const isAuthenticated = !!data.session
 

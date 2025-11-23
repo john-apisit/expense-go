@@ -68,7 +68,7 @@ const fetchTransactions = async () => {
       .order('transaction_date', { ascending: false })
 
     if (error) throw error
-    transactions.value = data || []
+    transactions.value = (data || []) as OneTimeTransaction[]
   } catch (e) {
     console.error('Error fetching transactions:', e)
   } finally {

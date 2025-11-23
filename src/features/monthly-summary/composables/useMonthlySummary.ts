@@ -17,7 +17,7 @@ export function useMonthlySummary() {
         .single()
 
       if (fetchError) throw fetchError
-      initialBalance.value = data?.amount || 0
+      initialBalance.value = (data as any)?.amount || 0
     } catch (e) {
       console.error('Error fetching initial balance:', e)
       initialBalance.value = 0

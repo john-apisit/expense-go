@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 px-4">
+  <div class="min-h-screen flex items-center justify-center bg-linear-to-br from-blue-50 to-indigo-100 px-4">
     <BalanceForm :loading="loading" :error="error" @submit="handleSubmit" />
   </div>
 </template>
@@ -27,7 +27,7 @@ const handleSubmit = async (amount: number) => {
       .insert({
         user_id: userData.user.id,
         amount,
-      })
+      } as any)
 
     if (insertError) throw insertError
 

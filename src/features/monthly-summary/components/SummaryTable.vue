@@ -134,7 +134,7 @@ const totalExpense = computed(() => {
 
 const finalBalance = computed(() => {
   if (props.summaries.length === 0) return props.initialBalance
-  return props.summaries[props.summaries.length - 1].runningBalance
+  return props.summaries[props.summaries.length - 1]?.runningBalance ?? props.initialBalance
 })
 
 const formatMonthDisplay = (monthKey: string) => {

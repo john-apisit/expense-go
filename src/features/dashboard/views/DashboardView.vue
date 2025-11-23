@@ -304,21 +304,21 @@ const fetchData = async () => {
       .from('initial_balance')
       .select('amount')
       .single()
-    initialBalance.value = balanceData?.amount || 0
+    initialBalance.value = (balanceData as any)?.amount || 0
 
     // Fetch recurring transactions
     const { data: recurringData } = await supabase
       .from('recurring_transactions')
       .select('*, category:categories(*)')
       .eq('is_deleted', false)
-    recurringTransactions.value = recurringData || []
+    recurringTransactions.value = (recurringData || []) as RecurringTransaction[]
 
     // Fetch one-time transactions
     const { data: oneTimeData } = await supabase
       .from('one_time_transactions')
       .select('*, category:categories(*)')
       .eq('is_deleted', false)
-    oneTimeTransactions.value = oneTimeData || []
+    oneTimeTransactions.value = (oneTimeData || []) as OneTimeTransaction[]
   } catch (e) {
     console.error('Error fetching data:', e)
   } finally {

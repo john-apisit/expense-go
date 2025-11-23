@@ -22,7 +22,6 @@
 import { ref, watch } from 'vue'
 import BaseInput from '../../../shared/components/BaseInput.vue'
 import BaseButton from '../../../shared/components/BaseButton.vue'
-import { formatMonthInput } from '../../../shared/utils/date'
 
 interface Props {
   startMonth: string

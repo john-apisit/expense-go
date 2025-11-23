@@ -45,7 +45,6 @@ export function useCategories() {
 
       const { data, error: insertError } = await supabase
         .from('categories')
-        // @ts-ignore - Supabase type inference issue
         .insert({ name, type, user_id: userData.user.id })
         .select()
         .single()
@@ -70,7 +69,6 @@ export function useCategories() {
     try {
       const { data, error: updateError } = await supabase
         .from('categories')
-        // @ts-ignore - Supabase type inference issue
         .update({ name })
         .eq('id', id)
         .select()
@@ -99,7 +97,6 @@ export function useCategories() {
     try {
       const { data, error: deleteError } = await supabase
         .from('categories')
-        // @ts-ignore - Supabase type inference issue
         .update({ is_deleted: true })
         .eq('id', id)
         .select()
