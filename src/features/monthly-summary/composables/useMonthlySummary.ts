@@ -83,7 +83,9 @@ export function useMonthlySummary() {
         let oneTimeExpense = 0
 
         // Parse month and year from monthKey (format: YYYY-MM)
-        const [year, month] = monthKey.split('-').map(Number)
+        const [yearStr, monthStr] = monthKey.split('-')
+        const year = Number(yearStr)
+        const month = Number(monthStr)
 
         // Calculate recurring transactions for this month
         for (const transaction of recurringTransactions) {

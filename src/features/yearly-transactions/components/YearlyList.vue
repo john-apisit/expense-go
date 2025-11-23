@@ -107,9 +107,9 @@ const emit = defineEmits<{
 }>()
 
 const tabs = [
-  { value: 'all', label: 'ทั้งหมด' },
-  { value: 'income', label: 'รายรับ' },
-  { value: 'expense', label: 'รายจ่าย' },
+  { value: 'all' as const, label: 'ทั้งหมด' },
+  { value: 'income' as const, label: 'รายรับ' },
+  { value: 'expense' as const, label: 'รายจ่าย' },
 ]
 
 const activeFilter = ref<'all' | 'income' | 'expense'>('all')

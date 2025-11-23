@@ -29,7 +29,7 @@ import { computed } from 'vue'
 interface Props {
   id?: string
   type?: 'text' | 'email' | 'password' | 'number' | 'date' | 'month'
-  modelValue?: string | number
+  modelValue?: string | number | null
   label?: string
   placeholder?: string
   required?: boolean
@@ -47,7 +47,7 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 const emit = defineEmits<{
-  'update:modelValue': [value: string | number]
+  'update:modelValue': [value: string | number | null]
   blur: []
 }>()
 
@@ -62,8 +62,12 @@ const inputClasses = computed(() => {
 
 const handleInput = (event: Event) => {
   const target = event.target as HTMLInputElement
-  const value = props.type === 'number' ? Number(target.value) : target.value
-  emit('update:modelValue', value)
+  if (props.type === 'number') {
+    const value = target.value === '' ? null : Number(target.value)
+    emit('update:modelValue', value)
+  } else {
+    emit('update:modelValue', target.value)
+  }
 }
 
 const handleBlur = () => {
