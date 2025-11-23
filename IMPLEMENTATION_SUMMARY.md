@@ -318,7 +318,7 @@ expense-go/
 - **BaseInput**: Full validation, error messages, hints
 - **BaseSelect**: Dropdown with validation
 - **BaseModal**: Reusable modal with backdrop
-- **Layout**: Navigation bar with active states, logout
+- **Layout**: Navigation bar with active states, logout, mobile hamburger menu
 
 ### UX Features
 - **Loading States**: Spinners during data fetch
@@ -326,6 +326,7 @@ expense-go/
 - **Confirmation Dialogs**: Before delete operations
 - **Empty States**: Helpful messages when no data
 - **Hover Effects**: Visual feedback on interactive elements
+- **Mobile Navigation**: Hamburger menu with slide-down navigation for mobile devices
 
 ---
 

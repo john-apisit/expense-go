@@ -93,7 +93,7 @@
               <svg class="w-8 h-8 text-gray-400 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
               </svg>
-              <span class="text-sm font-medium text-gray-700">รายการประจำ</span>
+              <span class="text-sm font-medium text-gray-700">รายการประจำเดือน</span>
             </router-link>
 
             <router-link

@@ -2,7 +2,7 @@
   <Layout>
     <div class="space-y-6">
       <div class="flex justify-between items-center">
-        <h1 class="text-3xl font-bold text-gray-900">รายการประจำ</h1>
+        <h1 class="text-3xl font-bold text-gray-900">รายการประจำเดือน</h1>
         <BaseButton @click="showModal = true">
           <svg class="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
