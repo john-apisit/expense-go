@@ -46,12 +46,30 @@ export interface OneTimeTransaction {
   category?: Category;
 }
 
+export interface YearlyTransaction {
+  id: string;
+  user_id: string;
+  title: string;
+  category_id: string;
+  amount: number;
+  type: "expense" | "income";
+  occurrence_month: number; // 1-12 (January-December)
+  start_year: number;
+  end_year: number | null;
+  is_deleted: boolean;
+  created_at: string;
+  updated_at: string;
+  category?: Category;
+}
+
 export interface MonthlySummary {
   month: string; // YYYY-MM format
   recurringIncome: number;
   recurringExpense: number;
   oneTimeIncome: number;
   oneTimeExpense: number;
+  yearlyIncome: number;
+  yearlyExpense: number;
   totalIncome: number;
   totalExpense: number;
   netBalance: number;

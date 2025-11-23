@@ -4,6 +4,7 @@ import LoginView from '../features/auth/views/LoginView.vue'
 import InitialBalanceView from '../features/initial-balance/views/InitialBalanceView.vue'
 import DashboardView from '../features/dashboard/views/DashboardView.vue'
 import RecurringTransactionsView from '../features/recurring-transactions/views/RecurringTransactionsView.vue'
+import YearlyTransactionsView from '../features/yearly-transactions/views/YearlyTransactionsView.vue'
 import OneTimeTransactionsView from '../features/one-time-transactions/views/OneTimeTransactionsView.vue'
 import MonthlySummaryView from '../features/monthly-summary/views/MonthlySummaryView.vue'
 import CategoriesView from '../features/categories/views/CategoriesView.vue'
@@ -43,6 +44,12 @@ const router = createRouter({
       path: '/recurring-transactions',
       name: 'recurring-transactions',
       component: RecurringTransactionsView,
+      meta: { requiresAuth: true, requiresInitialBalance: true },
+    },
+    {
+      path: '/yearly-transactions',
+      name: 'yearly-transactions',
+      component: YearlyTransactionsView,
       meta: { requiresAuth: true, requiresInitialBalance: true },
     },
     {

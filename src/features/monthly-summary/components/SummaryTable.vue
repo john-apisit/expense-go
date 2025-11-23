@@ -11,6 +11,9 @@
               รายรับประจำ
             </th>
             <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+              รายรับประจำปี
+            </th>
+            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
               รายรับครั้งเดียว
             </th>
             <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -18,6 +21,9 @@
             </th>
             <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
               รายจ่ายประจำ
+            </th>
+            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+              รายจ่ายประจำปี
             </th>
             <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
               รายจ่ายครั้งเดียว
@@ -35,7 +41,7 @@
         </thead>
         <tbody class="bg-white divide-y divide-gray-200">
           <tr v-if="summaries.length === 0">
-            <td colspan="9" class="px-6 py-12 text-center text-gray-500">
+            <td colspan="11" class="px-6 py-12 text-center text-gray-500">
               ไม่มีข้อมูล
             </td>
           </tr>
@@ -51,6 +57,9 @@
               {{ formatNumber(summary.recurringIncome) }}
             </td>
             <td class="px-6 py-4 whitespace-nowrap text-sm text-right text-green-600">
+              {{ formatNumber(summary.yearlyIncome) }}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-right text-green-600">
               {{ formatNumber(summary.oneTimeIncome) }}
             </td>
             <td class="px-6 py-4 whitespace-nowrap text-sm text-right font-semibold text-green-600">
@@ -58,6 +67,9 @@
             </td>
             <td class="px-6 py-4 whitespace-nowrap text-sm text-right text-red-600">
               {{ formatNumber(summary.recurringExpense) }}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-right text-red-600">
+              {{ formatNumber(summary.yearlyExpense) }}
             </td>
             <td class="px-6 py-4 whitespace-nowrap text-sm text-right text-red-600">
               {{ formatNumber(summary.oneTimeExpense) }}

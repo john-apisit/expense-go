@@ -30,6 +30,13 @@
                 รายการประจำ
               </router-link>
               <router-link
+                to="/yearly-transactions"
+                class="inline-flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors"
+                :class="isActive('/yearly-transactions') ? 'bg-blue-50 text-blue-700' : 'text-gray-700 hover:bg-gray-100'"
+              >
+                รายการประจำปี
+              </router-link>
+              <router-link
                 to="/one-time-transactions"
                 class="inline-flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors"
                 :class="isActive('/one-time-transactions') ? 'bg-blue-50 text-blue-700' : 'text-gray-700 hover:bg-gray-100'"

@@ -162,6 +162,59 @@ export type Database = {
           },
         ]
       }
+      yearly_transactions: {
+        Row: {
+          amount: number
+          category_id: string
+          created_at: string | null
+          end_year: number | null
+          id: string
+          is_deleted: boolean | null
+          occurrence_month: number
+          start_year: number
+          title: string
+          type: Database["public"]["Enums"]["transaction_type"]
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          category_id: string
+          created_at?: string | null
+          end_year?: number | null
+          id?: string
+          is_deleted?: boolean | null
+          occurrence_month: number
+          start_year: number
+          title: string
+          type: Database["public"]["Enums"]["transaction_type"]
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          category_id?: string
+          created_at?: string | null
+          end_year?: number | null
+          id?: string
+          is_deleted?: boolean | null
+          occurrence_month?: number
+          start_year?: number
+          title?: string
+          type?: Database["public"]["Enums"]["transaction_type"]
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "yearly_transactions_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "categories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never

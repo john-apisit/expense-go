@@ -75,7 +75,7 @@
         <!-- Quick Actions -->
         <div class="bg-white rounded-lg shadow p-6">
           <h3 class="text-lg font-semibold text-gray-900 mb-4">เริ่มต้นใช้งาน</h3>
-          <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+          <div class="grid grid-cols-2 md:grid-cols-6 gap-4">
             <router-link
               to="/categories"
               class="flex flex-col items-center justify-center p-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors"
@@ -94,6 +94,16 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
               </svg>
               <span class="text-sm font-medium text-gray-700">รายการประจำ</span>
+            </router-link>
+
+            <router-link
+              to="/yearly-transactions"
+              class="flex flex-col items-center justify-center p-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors"
+            >
+              <svg class="w-8 h-8 text-gray-400 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+              <span class="text-sm font-medium text-gray-700">รายการประจำปี</span>
             </router-link>
 
             <router-link
@@ -140,11 +150,12 @@ import RecentTransactions from '../components/RecentTransactions.vue'
 import MonthlyChart from '../components/MonthlyChart.vue'
 import { supabase } from '../../../supabase/client'
 import { getMonthKey, isMonthInRange } from '../../../shared/utils/date'
-import type { RecurringTransaction, OneTimeTransaction } from '../../../shared/types'
+import type { RecurringTransaction, OneTimeTransaction, YearlyTransaction } from '../../../shared/types'
 
 const loading = ref(true)
 const initialBalance = ref(0)
 const recurringTransactions = ref<RecurringTransaction[]>([])
+const yearlyTransactions = ref<YearlyTransaction[]>([])
 const oneTimeTransactions = ref<OneTimeTransaction[]>([])
 
 const currentMonthKey = computed(() => getMonthKey(new Date()))
@@ -159,12 +170,26 @@ const currentMonthDisplay = computed(() => {
 const currentMonthIncome = computed(() => {
   let total = 0
 
+  // Parse current month and year for yearly transactions
+  const now = new Date()
+  const currentMonth = now.getMonth() + 1
+  const currentYear = now.getFullYear()
+
   // Recurring income
   for (const transaction of recurringTransactions.value) {
     if (transaction.type === 'income') {
       const startMonth = getMonthKey(transaction.start_month)
       const endMonth = transaction.end_month ? getMonthKey(transaction.end_month) : null
       if (isMonthInRange(currentMonthKey.value, startMonth, endMonth)) {
+        total += transaction.amount
+      }
+    }
+  }
+
+  // Yearly income
+  for (const transaction of yearlyTransactions.value) {
+    if (transaction.type === 'income' && transaction.occurrence_month === currentMonth) {
+      if (currentYear >= transaction.start_year && (transaction.end_year === null || currentYear <= transaction.end_year)) {
         total += transaction.amount
       }
     }
@@ -183,12 +208,26 @@ const currentMonthIncome = computed(() => {
 const currentMonthExpense = computed(() => {
   let total = 0
 
+  // Parse current month and year for yearly transactions
+  const now = new Date()
+  const currentMonth = now.getMonth() + 1
+  const currentYear = now.getFullYear()
+
   // Recurring expense
   for (const transaction of recurringTransactions.value) {
     if (transaction.type === 'expense') {
       const startMonth = getMonthKey(transaction.start_month)
       const endMonth = transaction.end_month ? getMonthKey(transaction.end_month) : null
       if (isMonthInRange(currentMonthKey.value, startMonth, endMonth)) {
+        total += transaction.amount
+      }
+    }
+  }
+
+  // Yearly expense
+  for (const transaction of yearlyTransactions.value) {
+    if (transaction.type === 'expense' && transaction.occurrence_month === currentMonth) {
+      if (currentYear >= transaction.start_year && (transaction.end_year === null || currentYear <= transaction.end_year)) {
         total += transaction.amount
       }
     }
@@ -219,6 +258,8 @@ const chartData = computed(() => {
   for (let i = 5; i >= 0; i--) {
     const date = new Date(now.getFullYear(), now.getMonth() - i, 1)
     const monthKey = getMonthKey(date)
+    const month = date.getMonth() + 1
+    const year = date.getFullYear()
 
     let income = 0
     let expense = 0
@@ -233,6 +274,19 @@ const chartData = computed(() => {
           income += transaction.amount
         } else {
           expense += transaction.amount
+        }
+      }
+    }
+
+    // Calculate yearly transactions
+    for (const transaction of yearlyTransactions.value) {
+      if (transaction.occurrence_month === month) {
+        if (year >= transaction.start_year && (transaction.end_year === null || year <= transaction.end_year)) {
+          if (transaction.type === 'income') {
+            income += transaction.amount
+          } else {
+            expense += transaction.amount
+          }
         }
       }
     }
@@ -287,6 +341,21 @@ const calculateTotalBalance = () => {
     }
   }
 
+  // Calculate all yearly transactions up to now
+  for (const transaction of yearlyTransactions.value) {
+    const currentYear = now.getFullYear()
+    const endYear = transaction.end_year || currentYear
+
+    for (let year = transaction.start_year; year <= Math.min(currentYear, endYear); year++) {
+      // Check if the occurrence month has passed in this year
+      const occurrenceDate = new Date(year, transaction.occurrence_month - 1, 1)
+      if (occurrenceDate <= now) {
+        const amount = transaction.type === 'income' ? transaction.amount : -transaction.amount
+        total += amount
+      }
+    }
+  }
+
   // Calculate all one-time transactions
   for (const transaction of oneTimeTransactions.value) {
     const amount = transaction.type === 'income' ? transaction.amount : -transaction.amount
@@ -312,6 +381,13 @@ const fetchData = async () => {
       .select('*, category:categories(*)')
       .eq('is_deleted', false)
     recurringTransactions.value = (recurringData || []) as RecurringTransaction[]
+
+    // Fetch yearly transactions
+    const { data: yearlyData } = await supabase
+      .from('yearly_transactions')
+      .select('*, category:categories(*)')
+      .eq('is_deleted', false)
+    yearlyTransactions.value = (yearlyData || []) as YearlyTransaction[]
 
     // Fetch one-time transactions
     const { data: oneTimeData } = await supabase

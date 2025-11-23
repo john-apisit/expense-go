@@ -145,7 +145,25 @@ expense-go/
 - `src/features/recurring-transactions/components/RecurringList.vue`
 - `src/features/recurring-transactions/views/RecurringTransactionsView.vue`
 
-### 4. 💸 One-Time Transactions
+### 4. 📆 Yearly Transactions
+- **CRUD Operations**: Add, Edit, Delete (soft delete)
+- **Fields**:
+  - Title
+  - Category (filtered by type)
+  - Amount
+  - Type (Income/Expense)
+  - Occurrence Month (January-December)
+  - Start Year
+  - End Year (optional for ongoing)
+- **Filtering**: View by All/Income/Expense
+- **Use Cases**: Annual insurance, yearly subscriptions, annual bonuses
+
+**Files**:
+- `src/features/yearly-transactions/components/YearlyForm.vue`
+- `src/features/yearly-transactions/components/YearlyList.vue`
+- `src/features/yearly-transactions/views/YearlyTransactionsView.vue`
+
+### 5. 💸 One-Time Transactions
 - **CRUD Operations**: Add, Edit, Delete (soft delete)
 - **Fields**:
   - Title
@@ -162,12 +180,14 @@ expense-go/
 - `src/features/one-time-transactions/components/TransactionList.vue`
 - `src/features/one-time-transactions/views/OneTimeTransactionsView.vue`
 
-### 5. 📊 Monthly Summary
+### 6. 📊 Monthly Summary
 - **Comprehensive Table** showing per month:
   - Recurring Income
+  - Yearly Income
   - One-Time Income
   - Total Income
   - Recurring Expense
+  - Yearly Expense
   - One-Time Expense
   - Total Expense
   - Net Balance (Income - Expense)
@@ -177,6 +197,7 @@ expense-go/
 - **Summary Cards**: Initial balance, totals, final balance
 - **Calculation Logic**: 
   - Checks if recurring transaction is active in each month
+  - Checks if yearly transaction occurs in specific month/year
   - Groups one-time transactions by month
   - Calculates running balance from initial balance
 
@@ -186,13 +207,13 @@ expense-go/
 - `src/features/monthly-summary/composables/useMonthlySummary.ts`
 - `src/features/monthly-summary/views/MonthlySummaryView.vue`
 
-### 6. 📈 Dashboard
+### 7. 📈 Dashboard
 - **Summary Cards**:
   - Current Balance (Total balance with running calculation)
-  - This Month Income
-  - This Month Expense
+  - This Month Income (includes recurring, yearly, and one-time)
+  - This Month Expense (includes recurring, yearly, and one-time)
   - This Month Net (Income - Expense)
-- **Monthly Chart**: 6-month trend (bar visualization)
+- **Monthly Chart**: 6-month trend (bar visualization, includes yearly transactions)
 - **Recent Transactions**: Last 5 one-time transactions
 - **Quick Actions**: Links to all features + refresh button
 
@@ -244,7 +265,22 @@ expense-go/
 - created_at, updated_at
 ```
 
-#### 4. **one_time_transactions**
+#### 4. **yearly_transactions**
+```sql
+- id (UUID, PK)
+- user_id (UUID, FK → auth.users)
+- title (TEXT)
+- category_id (UUID, FK → categories)
+- amount (DECIMAL)
+- type (ENUM: expense | income)
+- occurrence_month (INTEGER) ← 1-12 (January-December)
+- start_year (INTEGER) ← Starting year
+- end_year (INTEGER, NULLABLE) ← NULL = ongoing
+- is_deleted (BOOLEAN) ← Soft delete
+- created_at, updated_at
+```
+
+#### 5. **one_time_transactions**
 ```sql
 - id (UUID, PK)
 - user_id (UUID, FK → auth.users)
@@ -431,10 +467,11 @@ All requirements met! Features include:
 
 - ✅ Login with username (email) and password
 - ✅ Page to add/update/delete monthly expenses/installments/income with start/end month
+- ✅ Page to add/update/delete yearly expenses/income with occurrence month and start/end year
 - ✅ Page to add/update/delete one-time expenses/income with date
 - ✅ Page to set initial balance (first time use)
-- ✅ Page showing monthly summary grouped by month with calculations
-- ✅ Dashboard page with financial overview
+- ✅ Page showing monthly summary grouped by month with calculations (includes yearly transactions)
+- ✅ Dashboard page with financial overview (includes yearly transactions)
 - ✅ Vue + Vite + TypeScript + TailwindCSS + Supabase
 - ✅ Feature-based project structure
 - ✅ Soft delete with is_deleted flag
@@ -466,6 +503,8 @@ All requirements met! Features include:
 8. Dark mode toggle
 9. Mobile app (Capacitor)
 10. Shared expenses feature (family/roommate mode)
+11. Transaction search and filtering
+12. Bulk import/export of transactions
 
 ---
 
